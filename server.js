@@ -12,10 +12,10 @@ var app = express();
 var port = process.env.PORT || 3000;
 
 /** this project needs a db !! **/ 
-mongoose.connect(process.env.MONGOLAB_URI);
-console.log(mongoose.connection.readyState);
+mongoose.connect(process.env.MONGO_URI);
+console.log("ReadyState: " + mongoose.connection.readyState);
 
-app.use(cors());
+app.use(cors());  
 
 /** this project needs to parse POST bodies **/
 // you should mount the body-parser here
