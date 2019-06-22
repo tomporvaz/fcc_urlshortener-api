@@ -7,7 +7,7 @@ var mongoose = require('mongoose');
 var cors = require('cors');
 
 var app = express();
-let Schema = mongoose.Schema();
+let Schema = mongoose.Schema;
 
 // Basic Configuration 
 var port = process.env.PORT || 3000;
