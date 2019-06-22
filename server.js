@@ -7,6 +7,7 @@ var mongoose = require('mongoose');
 var cors = require('cors');
 
 var app = express();
+let Schema = mongoose.Schema();
 
 // Basic Configuration 
 var port = process.env.PORT || 3000;
@@ -14,6 +15,13 @@ var port = process.env.PORT || 3000;
 /** this project needs a db !! **/ 
 mongoose.connect(process.env.MONGO_URI);
 console.log("ReadyState: " + mongoose.connection.readyState);
+
+//define url table schema
+let urlSchema = new Schema({
+  url: {type: String, required: true},
+  shortURL: String
+})
+let URLtable = ("URLtable", urlSchema);
 
 app.use(cors());  
 
