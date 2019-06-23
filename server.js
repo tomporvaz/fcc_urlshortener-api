@@ -36,10 +36,13 @@ app.get('/', function(req, res){
 });
 
   
-// your first API endpoint... 
+/*
+first enpoint accepts post requests, parses payload, writes url and shortURL to mongo,
+and returns json with url and shortURL
+*/
 app.post("/api/shorturl/new", function (req, res) {
   
-  res.json({reqBody: req.body});
+  res.json({"url": req.body.url, "shortURL": "return short URL here"});
 });
 
 
