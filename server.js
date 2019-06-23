@@ -41,8 +41,12 @@ first enpoint accepts post requests, parses payload, writes url and shortURL to 
 and returns json with url and shortURL
 */
 app.post("/api/shorturl/new", function (req, res) {
-  
-  res.json({"url": req.body.url, "shortURL": "return short URL here"});
+  dns.lookup(req.body.url, 
+    function(err){
+      if(err){return console.log("url not found! error: " + err)}
+      res.json({"url": req.body.url, "shortURL": "return short URL here"});
+    }
+  )
 });
 
 
