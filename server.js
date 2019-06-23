@@ -4,6 +4,7 @@ var express = require('express');
 var mongo = require('mongodb');
 var mongoose = require('mongoose');
 let bodyParser = require('body-parser');
+const dns = require('dns');
 
 var cors = require('cors');
 
@@ -41,7 +42,7 @@ first enpoint accepts post requests, parses payload, writes url and shortURL to 
 and returns json with url and shortURL
 */
 app.post("/api/shorturl/new", function (req, res) {
-  dns.lookup(req.body.url, 
+  dns.resolve(req.body.url, 
     function(err){
       if(err){return console.log("url not found! error: " + err)}
       res.json({"url": req.body.url, "shortURL": "return short URL here"});
