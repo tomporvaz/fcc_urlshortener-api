@@ -3,7 +3,7 @@
 var express = require('express');
 var mongo = require('mongodb');
 var mongoose = require('mongoose');
-let bodyParser = require('bodyParser');
+let bodyParser = require('body-parser');
 
 var cors = require('cors');
 
