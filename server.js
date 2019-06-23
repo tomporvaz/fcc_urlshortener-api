@@ -54,6 +54,33 @@ app.post("/api/shorturl/new", function (req, res) {
   )
 });
 
+/*url parser function to split url into:
+    - protocol (e.g. https://),
+    - hostname (e.g. www.freecodecamp.org)
+    - path (e.g. /) 
+*/
+function urlParser(url) {
+  let protocol = "";
+  let hostname = "";
+  let path = "";
+
+  //split protocol off of url
+  
+
+  //split hostname off of url
+
+  //split path off of url
+
+
+  //return object with url, protocol, hostname, and path
+  return {
+    "url": url,
+    "protocol": protocol,
+    "hostname": hostname,
+    "path": path
+  }
+}
+
 
 app.listen(port, function () {
   console.log('Node.js listening ...');
