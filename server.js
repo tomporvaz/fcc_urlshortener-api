@@ -51,10 +51,12 @@ app.post("/api/shorturl/new", function (req, res) {
 
   dns.lookup(req.body.url, 
     function(err){
-      if(err){ 
+      if (err) { 
         res.json({"url": req.body.url, "shortURL": "return short URL here"})
-        console.error("url not found! error: " + err)}
-      res.json({"url": req.body.url, "shortURL": "return short URL here"});
+        console.error("url not found! error: " + err)
+      } else {
+        res.json({"url": req.body.url, "shortURL": "return short URL here"});
+      }
     }
   )
 });
