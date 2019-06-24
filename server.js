@@ -46,7 +46,7 @@ app.post("/api/shorturl/new", function (req, res) {
   //dns.lookup will not accept the protocol (https//) and it cannot have a path (e.g. /)
   //recommendation: parse req.body.url with regexs and pass host var to dns look up.
   let parsedURL = urlParser(req.body.url);
-  console.log("ParsedURL: " + parsedURL);
+  console.log("ParsedURL: " + JSON.stringify(parsedURL));
 
 
   dns.lookup(req.body.url, 
