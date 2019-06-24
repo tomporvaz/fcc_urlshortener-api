@@ -65,7 +65,11 @@ function urlParser(url) {
   let path = "";
 
   //split protocol off of url
-  
+  if(url.startsWith("https://")){
+    return protocol = "https://"
+  } else if (url.startsWith("http://")){
+    return protocol = "http://"
+  } else {return console.error("url does not contain a protocol")}
 
   //split hostname off of url
 
