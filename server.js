@@ -71,10 +71,10 @@ function urlParser(url) {
 
   //split protocol off of url
   if(url.startsWith("https://")){
-    return protocol = "https://"
+    protocol = "https://"
   } else if (url.startsWith("http://")){
-    return protocol = "http://"
-  } else {return console.error("url does not contain a protocol")}
+    protocol = "http://"
+  } else {console.error("url does not contain a protocol")}
 
   //split hostname off of url
 
