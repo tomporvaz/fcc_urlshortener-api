@@ -81,13 +81,16 @@ function urlParser(url) {
     console.error("url does not contain a protocol")}
 
   //split hostname off of url
-  const beginSlice = protocol.length + 1;
+  const beginSlice = protocol.length;
   console.log("BeginSlice: " + beginSlice);
   const endSlice = url.indexOf("/", (protocol.length + 1));
   console.log("EndSlice: " + endSlice);
-
-  hostname = url.slice(beginSlice, endSlice);
   
+  if (endSlice){
+    hostname = url.slice(beginSlice, endSlice);
+  } else {hostname = url.slice(beginSlice)};
+ 
+
 
 
 
