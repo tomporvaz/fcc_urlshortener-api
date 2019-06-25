@@ -86,7 +86,7 @@ function urlParser(url) {
   const endSlice = url.indexOf("/", (protocol.length + 1));
   console.log("EndSlice: " + endSlice);
   
-  if (endSlice){
+  if (endSlice > -1){
     hostname = url.slice(beginSlice, endSlice);
   } else {hostname = url.slice(beginSlice)};
  
