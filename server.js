@@ -91,7 +91,10 @@ function urlParser(url) {
   } else {hostname = url.slice(beginSlice)};
  
   //split path off of url
-  path = url.slice(endSlice);
+  if (endSlice > -1){
+    path = url.slice(endSlice);
+  }
+  
 
 
   //return object with url, protocol, hostname, and path
