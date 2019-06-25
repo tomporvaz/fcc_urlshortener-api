@@ -76,12 +76,19 @@ function urlParser(url) {
     protocol = "https://"
   } else if (url.startsWith("http://")){
     protocol = "http://"
-  } else {console.error("url does not contain a protocol")}
+  } else {
+    //return error here and escape function
+    console.error("url does not contain a protocol")}
 
   //split hostname off of url
-  const httpRegex = /http[s]*:\/\//;
-  const beginSlice = url.indexOf(httpRegex);
+  const beginSlice = protocol.length + 1;
   console.log("BeginSlice: " + beginSlice);
+  const endSlice = url.indexOf("/", (protocol.length + 1));
+  console.log("EndSlice: " + endSlice);
+
+  hostname = url.slice(beginSlice, endSlice);
+  
+
 
 
 
