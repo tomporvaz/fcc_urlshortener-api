@@ -49,7 +49,7 @@ app.post("/api/shorturl/new", function (req, res) {
   console.log("ParsedURL: " + JSON.stringify(parsedURL));
 
 
-  dns.lookup(req.body.url, 
+  dns.lookup(parsedURL.hostname, 
     function(err){
       if(err){ 
         res.json({"url": req.body.url, "error": "invalid url"})
