@@ -51,7 +51,7 @@ app.post("/api/shorturl/new", function (req, res) {
 
   dns.lookup(req.body.url, 
     function(err){
-      if (err) { 
+      if(err){ 
         res.json({"url": req.body.url, "error": "invalid url"})
         console.error("url not found! error: " + err)
       } else {
@@ -79,6 +79,12 @@ function urlParser(url) {
   } else {console.error("url does not contain a protocol")}
 
   //split hostname off of url
+  const httpRegex = /http[s]*:\/\//;
+  const beginSlice = url.indexOf(httpRegex);
+  console.log("BeginSlice: " + beginSlice);
+
+
+
 
   //split path off of url
 
