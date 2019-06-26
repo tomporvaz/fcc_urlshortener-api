@@ -21,9 +21,9 @@ console.log("ReadyState: " + mongoose.connection.readyState);
 //define url table schema
 let urlSchema = new Schema({
   url: {type: String, required: true},
-  shortURL: String
+  shortURL: {type: Number, index: true, unique: true, min: 0, max: 9999}
 })
-let URLtable = ("URLtable", urlSchema);
+let URLentry = mongoose.model("URLentry", urlSchema);
 
 app.use(cors());  
 
@@ -55,6 +55,11 @@ app.post("/api/shorturl/new", function (req, res) {
         res.json({"url": req.body.url, "error": "invalid url"})
         console.error("url not found! error: " + err)
       } else {
+        //query mongo to find available shorturl
+        //add parsedURL object to mongo with a shorturl
+        const currentURL = new URLentry({url: req.body.url});
+        
+        //respond with url and shorturl
         res.json({"url": req.body.url, "shortURL": "return short URL here"});
       }
     }
