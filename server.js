@@ -48,6 +48,7 @@ app.post("/api/shorturl/new", function (req, res) {
   let parsedURL = urlParser(req.body.url);
   console.log("ParsedURL: " + JSON.stringify(parsedURL));
 
+  let retry = false; //used to test if url should be resaved.
 
   dns.lookup(parsedURL.hostname, 
     function(err){
@@ -57,13 +58,25 @@ app.post("/api/shorturl/new", function (req, res) {
       } else {
         //query mongo to find available shorturl
         //add parsedURL object to mongo with a shorturl
+        //The do while loop will retry a new random number until save is sucessful
+        do{
         const currentURL = new URLentry({url: req.body.url, shortURL: getRandomInt(100000)});
         currentURL.save(
           function(err, entry){
-            if(err){console.error("CurrentURL could not be saved. " + err)};
+            if(err){
+              console.error("CurrentURL could not be saved. " + err);
+              
+              //check if error occured due to a shortURL collision and set retry to true if so
+              //could be implemented using info from error (less resilent due to mongoose updates)
+              //or it could be implemented with a query (ineffecient due to additional db request)
+              if(err.includes("E11000")){
+                retry = true;
+              }
+            };
             console.log("Saved entry: " + JSON.stringify(entry));
           }
         );
+        } while (retry === false);
         
         //respond with url and shorturl
         res.json({"url": req.body.url, "shortURL": "return short URL here"});
