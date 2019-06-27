@@ -5,6 +5,7 @@ var mongo = require('mongodb');
 var mongoose = require('mongoose');
 let bodyParser = require('body-parser');
 const dns = require('dns');
+const ShortId = require('mongoose-shortid');
 
 var cors = require('cors');
 
@@ -21,7 +22,7 @@ console.log("ReadyState: " + mongoose.connection.readyState);
 //define url table schema
 let urlSchema = new Schema({
   url: {type: String, required: true},
-  shortURL: {type: Number, index: true, unique: true, min: 0, max: 9999, required: true}
+  shortURL: {type: ShortID, index: true, required: true}
 })
 let URLentry = mongoose.model("URLentry", urlSchema);
 
