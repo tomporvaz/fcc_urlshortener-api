@@ -5,7 +5,6 @@ var mongo = require('mongodb');
 var mongoose = require('mongoose');
 let bodyParser = require('body-parser');
 const dns = require('dns');
-const ShortId = require('mongoose-shortid');
 
 var cors = require('cors');
 
@@ -19,10 +18,10 @@ var port = process.env.PORT || 3000;
 mongoose.connect(process.env.MONGO_URI);
 console.log("ReadyState: " + mongoose.connection.readyState);
 
-//define url table schema
+//define url schema
 let urlSchema = new Schema({
   url: {type: String, required: true},
-  shortURL: {type: ShortID, index: true, required: true}
+  shortURL: {type: Number, index: true, required: true, unique: true, min: 0, max: 99999}
 })
 let URLentry = mongoose.model("URLentry", urlSchema);
 
@@ -58,7 +57,7 @@ app.post("/api/shorturl/new", function (req, res) {
       } else {
         //query mongo to find available shorturl
         //add parsedURL object to mongo with a shorturl
-        const currentURL = new URLentry({url: req.body.url});
+        const currentURL = new URLentry({url: req.body.url, shortURL: getRandomInt(100000)});
         currentURL.save(
           function(err, entry){
             if(err){console.error("CurrentURL could not be saved. " + err)};
@@ -72,6 +71,8 @@ app.post("/api/shorturl/new", function (req, res) {
     }
   )
 });
+
+
 
 /*url parser function to split url into:
     - protocol (e.g. https://),
@@ -116,6 +117,10 @@ function urlParser(url) {
     "hostname": hostname,
     "path": path
   }
+}
+
+function getRandomInt(max) {
+  return Math.floor(Math.random() * Math.floor(max));
 }
 
 
