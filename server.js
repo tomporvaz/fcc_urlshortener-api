@@ -21,7 +21,7 @@ console.log("ReadyState: " + mongoose.connection.readyState);
 //define url table schema
 let urlSchema = new Schema({
   url: {type: String, required: true},
-  shortURL: {type: Number, index: true, unique: true, min: 0, max: 9999}
+  shortURL: {type: Number, index: true, unique: true, min: 0, max: 9999, required: true}
 })
 let URLentry = mongoose.model("URLentry", urlSchema);
 
