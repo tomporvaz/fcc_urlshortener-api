@@ -58,6 +58,12 @@ app.post("/api/shorturl/new", function (req, res) {
         //query mongo to find available shorturl
         //add parsedURL object to mongo with a shorturl
         const currentURL = new URLentry({url: req.body.url});
+        currentURL.save(
+          function(err, entry){
+            if(err){console.error("currentURL could not be saved." + err)};
+            console.log("Saved entry: " + JSON.stringify(entry));
+          }
+        );
         
         //respond with url and shorturl
         res.json({"url": req.body.url, "shortURL": "return short URL here"});
