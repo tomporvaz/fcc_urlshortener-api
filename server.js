@@ -59,7 +59,7 @@ app.post("/api/shorturl/new", function (req, res) {
         //query mongo to find available shorturl
         //add parsedURL object to mongo with a shorturl
         //The do while loop will retry a new random number until save is sucessful
-        createSaveShortURL(reg.body.url);
+        res.json(createSaveShortURL(res.body.url));
         
         //respond with url and shorturl
         
@@ -135,7 +135,7 @@ function createSaveShortURL (requestBodyURL) {
               }
             };
             console.log("Saved entry: " + JSON.stringify(entry));
-            res.json({"url": requestBodyURL, "shortURL": URLentry.shortURL});
+            return ({"url": requestBodyURL, "shortURL": URLentry.shortURL});
           }
         );
 
