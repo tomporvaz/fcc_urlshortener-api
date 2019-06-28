@@ -59,29 +59,10 @@ app.post("/api/shorturl/new", function (req, res) {
         //query mongo to find available shorturl
         //add parsedURL object to mongo with a shorturl
         //The do while loop will retry a new random number until save is sucessful
-        do{
-        const currentURL = new URLentry({url: req.body.url, shortURL: getRandomInt(10)});
-        currentURL.save(
-          function(err, entry){
-            if(err){
-              console.error("CurrentURL could not be saved. " + err);
-              
-              //check if error occured due to a shortURL collision and set retry to true if so
-              //could be implemented using info from error (less resilent due to mongoose updates)
-              //or it could be implemented with a query (ineffecient due to additional db request)
-              if(err.code === 11000){
-                console.log("Error code 11000");
-                retry = true;
-              }
-            };
-            console.log("Saved entry: " + JSON.stringify(entry));
-            console.log("Retry value: " + retry);
-          }
-        );
-        } while (retry === true);
+        createSaveShortURL(reg.body.url);
         
         //respond with url and shorturl
-        res.json({"url": req.body.url, "shortURL": "return short URL here"});
+        
       }
     }
   )
@@ -137,6 +118,28 @@ function urlParser(url) {
 function getRandomInt(max) {
   return Math.floor(Math.random() * Math.floor(max));
 }
+
+function createSaveShortURL (requestBodyURL) {
+  const currentURL = new URLentry({url: requestBodyURL, shortURL: getRandomInt(10)});
+        currentURL.save(
+          function(err, entry){
+            if(err){
+              console.error("CurrentURL could not be saved. " + err);
+              
+              //check if error occured due to a shortURL collision and set retry to true if so
+              //could be implemented using info from error (less resilent due to mongoose updates)
+              //or it could be implemented with a query (ineffecient due to additional db request)
+              if(err.code === 11000){
+                console.log("Error code 11000");
+                createSaveShortURL;
+              }
+            };
+            console.log("Saved entry: " + JSON.stringify(entry));
+            res.json({"url": requestBodyURL, "shortURL": URLentry.shortURL});
+          }
+        );
+
+};
 
 
 app.listen(port, function () {
