@@ -70,10 +70,12 @@ app.post("/api/shorturl/new", function (req, res) {
               //could be implemented using info from error (less resilent due to mongoose updates)
               //or it could be implemented with a query (ineffecient due to additional db request)
               if(err.code === 11000){
+                console.log("Error code 11000");
                 retry = true;
               }
             };
             console.log("Saved entry: " + JSON.stringify(entry));
+            console.log("Retry value: " + retry);
           }
         );
         } while (retry === true);
