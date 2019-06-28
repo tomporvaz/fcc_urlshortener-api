@@ -60,7 +60,7 @@ app.post("/api/shorturl/new", function (req, res) {
         //add parsedURL object to mongo with a shorturl
         //The do while loop will retry a new random number until save is sucessful
         do{
-        const currentURL = new URLentry({url: req.body.url, shortURL: getRandomInt(100000)});
+        const currentURL = new URLentry({url: req.body.url, shortURL: getRandomInt(10)});
         currentURL.save(
           function(err, entry){
             if(err){
@@ -69,14 +69,14 @@ app.post("/api/shorturl/new", function (req, res) {
               //check if error occured due to a shortURL collision and set retry to true if so
               //could be implemented using info from error (less resilent due to mongoose updates)
               //or it could be implemented with a query (ineffecient due to additional db request)
-              if(err.includes("E11000")){
+              if(err.code === 11000){
                 retry = true;
               }
             };
             console.log("Saved entry: " + JSON.stringify(entry));
           }
         );
-        } while (retry === false);
+        } while (retry === true);
         
         //respond with url and shorturl
         res.json({"url": req.body.url, "shortURL": "return short URL here"});
