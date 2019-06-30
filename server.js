@@ -59,8 +59,9 @@ app.post("/api/shorturl/new", function (req, res) {
         //query mongo to find available shorturl
         //add parsedURL object to mongo with a shorturl
         //The do while loop will retry a new random number until save is sucessful
-        let entry = createSaveShortURL(req.body.url)
+        let entry = createSaveShortURL(req.body.url);
         res.json(entry);
+        console.log("Returned Entry: " + JSON.stringify(entry));
         
         //respond with url and shorturl
         
@@ -122,7 +123,7 @@ function getRandomInt(max) {
 
 function createSaveShortURL (requestBodyURL) {
   const currentURL = new URLentry({url: requestBodyURL, shortURL: getRandomInt(10000)});
-        currentURL.save(
+  currentURL.save(
           function(err, entry){
             if(err){
               console.error("CurrentURL could not be saved. " + err);
