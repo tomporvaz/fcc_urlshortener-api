@@ -120,7 +120,7 @@ function getRandomInt(max) {
 }
 
 function createSaveShortURL (requestBodyURL) {
-  const currentURL = new URLentry({url: requestBodyURL, shortURL: getRandomInt(10)});
+  const currentURL = new URLentry({url: requestBodyURL, shortURL: getRandomInt(10000)});
         currentURL.save(
           function(err, entry){
             if(err){
@@ -135,7 +135,7 @@ function createSaveShortURL (requestBodyURL) {
               }
             };
             console.log("Saved entry: " + JSON.stringify(entry));
-            return ({"url": requestBodyURL, "shortURL": URLentry.shortURL});
+            return {"url": requestBodyURL, "shortURL": URLentry.shortURL};
           }
         );
 
