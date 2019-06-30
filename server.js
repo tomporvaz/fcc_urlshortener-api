@@ -136,10 +136,10 @@ function createSaveShortURL (requestBodyURL) {
               }
             };
             console.log("Saved entry: " + JSON.stringify(entry));
-            return entry;
+            
           }
         );
-
+  return URLentry;
 };
 
 
