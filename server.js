@@ -36,7 +36,7 @@ app.get('/', function(req, res){
   res.sendFile(process.cwd() + '/views/index.html');
 });
 
-  
+
 /*
 first enpoint accepts post requests, parses payload, writes url and shortURL to mongo,
 and returns json with url and shortURL
@@ -47,9 +47,9 @@ app.post("/api/shorturl/new", function (req, res) {
   //recommendation: parse req.body.url with regexs and pass host var to dns look up.
   let parsedURL = urlParser(req.body.url);
   console.log("ParsedURL: " + JSON.stringify(parsedURL));
-
+  
   let retry = false; //used to test if url should be resaved.
-
+  
   dns.lookup(parsedURL.hostname, 
     function(err){
       if(err){ 
@@ -67,30 +67,30 @@ app.post("/api/shorturl/new", function (req, res) {
         
       }
     }
-  )
-});
-
-
-
-/*url parser function to split url into:
-    - protocol (e.g. https://),
-    - hostname (e.g. www.freecodecamp.org)
-    - path (e.g. /) 
-*/
-function urlParser(url) {
-  let protocol = "";
-  let hostname = "";
-  let path = "";
-
-  //split protocol off of url
-  if(url.startsWith("https://")){
+    )
+  });
+  
+  
+  
+  /*url parser function to split url into:
+  - protocol (e.g. https://),
+  - hostname (e.g. www.freecodecamp.org)
+  - path (e.g. /) 
+  */
+  function urlParser(url) {
+    let protocol = "";
+    let hostname = "";
+    let path = "";
+    
+    //split protocol off of url
+    if(url.startsWith("https://")){
     protocol = "https://"
   } else if (url.startsWith("http://")){
-    protocol = "http://"
-  } else {
-    //return error here and escape function
-    console.error("url does not contain a protocol")}
-
+  protocol = "http://"
+} else {
+  //return error here and escape function
+  console.error("url does not contain a protocol")}
+  
   //split hostname off of url
   const beginSlice = protocol.length;
   console.log("BeginSlice: " + beginSlice);
@@ -100,14 +100,14 @@ function urlParser(url) {
   if (endSlice > -1){
     hostname = url.slice(beginSlice, endSlice);
   } else {hostname = url.slice(beginSlice)};
- 
+  
   //split path off of url
   if (endSlice > -1){
     path = url.slice(endSlice);
   }
   
-
-
+  
+  
   //return object with url, protocol, hostname, and path
   return {
     "url": url,
@@ -123,24 +123,36 @@ function getRandomInt(max) {
 
 function createSaveShortURL (requestBodyURL) {
   const currentURL = new URLentry({url: requestBodyURL, shortURL: getRandomInt(10000)});
-  currentURL.save(
-          function(err, entry){
-            if(err){
-              console.error("CurrentURL could not be saved. " + err);
-              
-              //check if error occured due to a shortURL collision and set retry to true if so
-              //could be implemented using info from error (less resilent due to mongoose updates)
-              //or it could be implemented with a query (ineffecient due to additional db request)
-              if(err.code === 11000){
-                console.log("Error code 11000");
-                createSaveShortURL(requestBodyURL);
-              }
-            };
-            console.log("Saved entry: " + JSON.stringify(entry));
-            
-          }
-        );
-  return URLentry;
+  currentURL.save()
+  .then(
+    savedEntry => savedEntry, //return saved object
+    //begining of failure callback the recursively calls createSaveShortURL on shortURL db collision
+    function(error){  
+      console.error("CurrentURL could not be saved. " + error);
+      if(error.code === 11000){
+        console.log("Error code 11000");
+        createSaveShortURL(requestBodyURL);
+      }
+    }
+  );
+  /*
+  function(err, entry){
+    if(err){
+      console.error("CurrentURL could not be saved. " + err);
+      
+      //check if error occured due to a shortURL collision and set retry to true if so
+      //could be implemented using info from error (less resilent due to mongoose updates)
+      //or it could be implemented with a query (ineffecient due to additional db request)
+      if(err.code === 11000){
+        console.log("Error code 11000");
+        createSaveShortURL(requestBodyURL);
+      }
+    };
+    console.log("Saved entry: " + JSON.stringify(entry));
+    
+  }
+  );
+  */
 };
 
 
