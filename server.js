@@ -65,11 +65,11 @@ app.post("/api/shorturl/new", function (req, res) {
         entryPromise.then(
           (entry) =>{
             res.json({"URL": entry.ReqBodyURL, "ShortURL": entry.shortURL});
-            console.log("Returned Entry: " + JSON.stringify(entry));
+            console.log("Returned Entry: " + JSON.stringify(err));
           },
           (error) => {
-            res.json({"URL": entry.ReqBodyURL, "ShortURL": "Could not be returned"});
-            console.log("Returned Error: " + JSON.stringify(entry));
+            res.json({"ShortURL": "Could not be returned"});
+            console.log("Returned Error: " + JSON.stringify(error));
           }
 
         )
