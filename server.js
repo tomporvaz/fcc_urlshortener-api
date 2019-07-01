@@ -59,10 +59,21 @@ app.post("/api/shorturl/new", function (req, res) {
         //query mongo to find available shorturl
         //add parsedURL object to mongo with a shorturl
         //The do while loop will retry a new random number until save is sucessful
-        let entry = createSaveShortURL(req.body.url);
-        res.json({"URL": entry.ReqBodyURL, "ShortURL": entry.shortURL});
-        console.log("Returned Entry: " + JSON.stringify(entry));
-        
+        let entryPromise = createSaveShortURL(req.body.url);
+        //res.json({"URL": entry.ReqBodyURL, "ShortURL": entry.shortURL});
+        //console.log("Returned Entry: " + JSON.stringify(entry));
+        entryPromise.then(
+          (entry) =>{
+            res.json({"URL": entry.ReqBodyURL, "ShortURL": entry.shortURL});
+            console.log("Returned Entry: " + JSON.stringify(entry));
+          },
+          (error) => {
+            res.json({"URL": entry.ReqBodyURL, "ShortURL": "Could not be returned"});
+            console.log("Returned Error: " + JSON.stringify(entry));
+          }
+
+        )
+
         //respond with url and shorturl
         
       }
@@ -123,7 +134,7 @@ function getRandomInt(max) {
 
 function createSaveShortURL (requestBodyURL) {
   const currentURL = new URLentry({url: requestBodyURL, shortURL: getRandomInt(10000)});
-  currentURL.save()
+  return currentURL.save()
   .then(
     savedEntry => savedEntry, //return saved object
     //begining of failure callback the recursively calls createSaveShortURL on shortURL db collision
