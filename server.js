@@ -62,29 +62,24 @@ app.post("/api/shorturl/new", function (req, res) {
         let entryPromise = createSaveShortURL(req.body.url);
         //res.json({"URL": entry.ReqBodyURL, "ShortURL": entry.shortURL});
         //console.log("Returned Entry: " + JSON.stringify(entry));
-        entryPromise.then(
-          (entry) =>{
+        entryPromise.then(function(entry){
+          entry => {
             res.json({"URL": entry.url, "ShortURL": entry.shortURL});
-            console.log("Returned Entry: " + JSON.stringify(err));
-          })
-          .catch(
-            (error) => {
-              console.log("Returned Error: " + JSON.stringify(error));
-              
-              console.error("CurrentURL could not be saved. " + error);
-              if(error.code === 11000){
-                console.log("Error code 11000");
-                createSaveShortURL(req.body.url);
-              }
-              
+            console.log("Returned Entry: " + JSON.stringify(entry));
+          }
+        }
+        .catch(
+          (error) => {
+            console.error("CurrentURL could not be saved. " + error);
+            if(error.code === 11000){
+              console.log("Error code 11000");
+              createSaveShortURL(req.body.url);
             }
-            )
-            
-            
-            
-            
-            //respond with url and shorturl
-            
+          }
+          )
+          ).catch(
+            (error) => {console.log("Returned Error: " + JSON.stringify(error))}
+          )
           }
         }
         )
@@ -154,7 +149,7 @@ app.post("/api/shorturl/new", function (req, res) {
             createSaveShortURL(requestBodyURL);
           }
         }*/
-       // );
+        // );
         /*
         function(err, entry){
           if(err){
