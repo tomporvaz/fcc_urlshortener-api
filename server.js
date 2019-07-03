@@ -76,7 +76,8 @@ app.post("/api/shorturl/new", function (req, res) {
                 //or it could be implemented with a query (ineffecient due to additional db request)
                 if(err.code === 11000){
                   console.log("Error code 11000");
-                  createEntry(requestBodyURL, attemptCounter++);
+                  console.log("attemptCouter = " + attemptCounter);
+                  createEntry(requestBodyURL, ++attemptCounter);
                 }
               } else {
                 console.log("Returned Entry: " + JSON.stringify(entry));
