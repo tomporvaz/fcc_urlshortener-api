@@ -85,6 +85,9 @@ app.post("/api/shorturl/new", function (req, res) {
               )
             })
           }
+        }
+      })
+    });
        
 
           /*url parser function to split url into:
