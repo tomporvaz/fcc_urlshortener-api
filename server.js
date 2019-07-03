@@ -59,12 +59,32 @@ app.post("/api/shorturl/new", function (req, res) {
         //query mongo to find available shorturl
         //add parsedURL object to mongo with a shorturl
         //The do while loop will retry a new random number until save is sucessful
-        function createEntry(url, attemptCounter) {
+        function createEntry(requestBodyURL, attemptCounter) {
           if (attemptCounter > 10){
             res.json({Error: "Too many attempts to save shortURL"});
             throw new Error ("Too many attempts to save shortURL");
           }
+
+          const currentURL = new URLentry({url: requestBodyURL, shortURL: getRandomInt(10000)});
+          return currentURL.save(
+            function(err, entry){
+              if(err){
+                console.error("CurrentURL could not be saved. " + err);
+                
+                //check if error occured due to a shortURL collision and set retry to true if so
+                //could be implemented using info from error (less resilent due to mongoose updates)
+                //or it could be implemented with a query (ineffecient due to additional db request)
+                if(err.code === 11000){
+                  console.log("Error code 11000");
+                  createEntry(requestBodyURL, attemptCounter++);
+                }
+              };
+              console.log("Returned Entry: " + JSON.stringify(entry));
+              return res.json({"URL": entry.url, "ShortURL": entry.shortURL});
+            }
+          )
           
+          /*
           return new Promise(function (resolve) {
             let entryPromise = createSaveShortURL(req.body.url);
             entryPromise
@@ -83,7 +103,7 @@ app.post("/api/shorturl/new", function (req, res) {
               )
               
               )
-            })
+            })*/
           }
           createEntry(req.body.url, 0);
         }
@@ -139,7 +159,9 @@ app.post("/api/shorturl/new", function (req, res) {
   function getRandomInt(max) {
     return Math.floor(Math.random() * Math.floor(max));
   }
-  
+
+
+  //DELETE ALL CODE HERE too....
   function createSaveShortURL (requestBodyURL) {
     const currentURL = new URLentry({url: requestBodyURL, shortURL: getRandomInt(10000)});
     return currentURL.save()
@@ -173,7 +195,7 @@ app.post("/api/shorturl/new", function (req, res) {
       );
       */
     };
-    
+    //....HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     
     app.listen(port, function () {
       console.log('Node.js listening ...');
