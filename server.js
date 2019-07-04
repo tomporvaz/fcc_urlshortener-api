@@ -65,8 +65,8 @@ app.post("/api/shorturl/new", function (req, res) {
         */
         function createEntry(requestBodyURL, attemptCounter) {
           if (attemptCounter > 10){
-            res.json({Error: "Too many attempts to save shortURL"});
-            throw new Error ("Too many attempts to save shortURL");
+            res.json({Error: "Too many attempts to save shortURL.  Sorry, try again or contact tomporvaz@gmail.com"});
+            throw new Error ("Too many attempts to save shortURL.  Sorry, try again or contact tomporvaz@gmail.com");
           }
           
           const currentURL = new URLentry({url: requestBodyURL, shortURL: getRandomInt(10000)});
@@ -95,8 +95,32 @@ app.post("/api/shorturl/new", function (req, res) {
         }
       })
     });
+
+  //this route will redirect the users shortenURL to the original address.  
+  app.get("/api/shorturl/:shortURLID", function (req, res) {
+    //get document from mongo
+    URLentry.find(
+      {"shortURL": req.params.shortURLID},
+      function (err, entry){
+        if (err)  {
+          console.error(err);
+          return res.json({"error": "redirect failed. System error = " + err})
+        } else {
+          //redirect user to original site
+          console.log("Found url coresponnding to shortURLID = " + req.params.shortURLID);
+          console.log("entry.url = " + entry.url);
+          res.redirect(entry.url);
+
+        }
+      } 
+    )
     
+
+
+  });  
     
+
+
     /*url parser function to split url into:
     - protocol (e.g. https://),
     - hostname (e.g. www.freecodecamp.org)
