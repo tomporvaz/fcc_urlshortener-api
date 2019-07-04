@@ -99,7 +99,7 @@ app.post("/api/shorturl/new", function (req, res) {
   //this route will redirect the users shortenURL to the original address.  
   app.get("/api/shorturl/:shortURLID", function (req, res) {
     //get document from mongo
-    URLentry.find(
+    URLentry.findOne(
       {"shortURL": req.params.shortURLID},
       function (err, entry){
         if (err)  {
